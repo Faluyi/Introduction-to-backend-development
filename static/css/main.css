@@ -1,0 +1,41 @@
+body{
+    background-color: lightblue
+}
+ h1{
+    color: white
+ }
+ p{
+    font-weight: 1em
+ }
+ table{
+    border-collapse: collapse;
+    width: 100%;
+ }
+ td,th{
+    border:lpx solid white;
+   text-align: left;
+    padding: 10px;
+ }
+
+#head_section {
+    display: flex;
+    flex-direction: row;
+    margin:auto;
+   
+}
+#form-head{
+ align-items: center;  
+ color: white; 
+}
+.col_right{
+    display: flex;
+    flex-direction: right;
+    font-size: 1em;
+    margin:auto;
+    flex-wrap: left 
+}
+.button{
+    border-radius: 10px;
+    margin-right: 10px;
+    padding: 8px;
+}

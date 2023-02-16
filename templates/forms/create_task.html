@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Create Task</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/static/css/main.css" type="text/css">
+    </head>
+    <body>
+        <header id="form-head">
+            <h1 id = "form-head">Create a New Task</h1>
+        </header>
+            <section id="form">
+                <form action="/task/create", method="POST">
+                    <div class="form-container">
+                        <div>
+                        <div><p>Task title:</p></div>
+                       <input type="text" name="Task_title" value="" required/><br>
+                        </div>
+                        <div>
+                            <div><p>Task id:</p></div>
+                           <input type="text" name="Task_id" value="" required/><br>
+                            </div>
+                        <div>
+                   
+                    <div>
+                    <div><p>Assign to:</p></div>
+                    <input type="text" name="asigned_to" value="" required/><br>
+                    </div>
+                    <div>
+                    <div><p>Deadline:</p></div>
+                    <div>Date:<input type="datetime-local"  name="Deadline" value="" required/></div><br>
+        
+                    </div>
+                    <div>
+                    <input type="submit" value="submit" required/></div>
+                    </div>
+                </div>
+            </form>
+            </section>
+        <script src="" async defer></script>
+    </body>
+</html>

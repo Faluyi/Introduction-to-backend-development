@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Add Breakdown</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <h1>Add Task Breakdown</h1>
+        <form action="/task/add_breakdown", method="post">
+            <div><select name="task_id" >
+                {% for data in data %}
+                <option value="{{data["_id"]}}">{{data["_id"]}}</option>
+                {% endfor %}
+                </select>
+            </div>
+        <div><input type="text" name="breakdown" value="" required/><input type="submit" value="Add"/></div>
+        </form>
+        
+            {% for dt in data %}
+            <ul><li><h3>{{dt["_id"]}}</h3>
+                <ol> {% for brk in breakdown %}
+                        {% if brk["Task_id"]==dt["_id"] %}
+                        <li>
+                         {{brk["breakdown"]}}
+                        </li>
+                       
+                         {%endif%}  
+                     {%endfor%}
+                
+                </ol>
+            </li>
+            </ul> 
+            {%endfor%}
+           
+        <script src="" async defer></script>
+    </body>
+</html>

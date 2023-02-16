@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Home Page</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../static/css/main.css" type="text/css" >
+       <style>
+       </style>
+    </head>
+    <body>
+      
+        <header id="head_section"> 
+            <div class="col_left"></div>
+               <h1>Active Tasks</h1>
+            </div>
+            <div  class="col_right">
+            <div><a href="/task/create"><button class="button">Create Task</button></a></div>
+            <div><a href="/task/breakdown"><button class="button">Add breakdown</button></a> </div>
+            <form action="/task/view_progress", method="post">
+                <div><select name="task_id" >
+                    {% for data in tasks %}
+                    <option value="{{data["_id"]}}">{{data["_id"]}}</option>
+                    {% endfor %}
+                    </select>
+                <input type="submit"  class="button" value="View progress"/></div>
+            </form>
+            </div>
+         </div>
+       </header>
+       <section id="tasks">
+        <table>
+            <tr>
+                <th>Task_id</th>
+                <th>Task_title</th>
+                <th>Assigned to</th>
+                <th>Date_created</th>
+                <th>Deadline</th>
+                <th>Progress</th>
+                <th> </th>
+
+            </tr>
+            <form action="/task/breakdown" method="post">
+            {% for task in tasks %}
+                <td>
+                    {{task["_id"]}}
+                </td>
+                <td>{{task["name"]}}</td>
+                <td>{{task["assigned_to"]}}</td>
+                <td>{{(task["date_assigned"]).strftime("%c")}}</td>
+                <td>{{task["deadline"]}}</td>
+                <td><p>70%</p><td>
+                </tr> 
+            {% endfor %} 
+            </form>
+        </table>
+       </section>
+        <script src="" async defer></script>
+
+      
+    </body>
+</html>
+
+
