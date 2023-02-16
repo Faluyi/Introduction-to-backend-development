@@ -79,17 +79,16 @@ def view_progress():
 @app.route('/task/update_progress', methods=["POST","GET"])
 def update_progress():
     if request.method=="POST":
-                
+        while         
         for brk in task_breakdown.find():
-            for dt in range(len(brk)):
-                progress=request.form.get(brk[dt])
-                query={"Task_id":(brk[dt])["Task_id"]}
+                progress=request.form.get(brk["Task_id"])
+                query={"Task_id":brk["Task_id"]}
                 new={"$set":{"progress":progress}}
                 task_breakdown.update_one(query,new)
             
         return redirect(url_for("index"))
         
-
+# Using this as a twest comment
 
 if __name__ =="__main__":
     app.run(debug=True)
