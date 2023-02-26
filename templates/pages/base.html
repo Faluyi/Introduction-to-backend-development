@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/static/css/bootstrap.css" type="text/css">
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+                <div class="container-fluid">
+                  <a class="navbar-brand" href="#">
+                    <img src="/static/images/avatar.jpg" alt="Avatar Logo" style="width:40px;" class="rounded-pill"> 
+                  </a>
+                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                  <div class="collapse navbar-collapse" id="mynavbar">
+                    <ul class="navbar-nav me-auto">
+                      <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="/task/create">Create Task</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)">Link</a>
+                      </li>
+                    </ul>
+                    <form class="d-flex" action="/task/view_task", method="post">
+                        <input class="form-select-sm me-2 form-control" list="task_id" name="task_id" id="browser" required>
+                        <datalist id="task_id">
+                          {% for data in tasks %}
+                            <option value="{{data["_id"]}}">{{data["_id"]}}</option>
+                          {% endfor %}
+                        </datalist>    
+                        <button type="submit" class="btn btn-primary mt-3">View </button>
+                      </form>
+
+                  </div>
+                </div>
+              </nav>
+              
+        </header>
+        <body>
+          {% block content %}
+
+          {% endblock %}
+        </body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        
+        <script src="/static/js/bootstrap.js" async defer></script>
+    </body>
+</html>

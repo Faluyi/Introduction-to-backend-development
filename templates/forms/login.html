@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/static/css/bootstrap.css" type="text/css">
+    </head>
+    <body>
+        <div class="container-fluid">
+            <form action="/verify_details">
+                <div class="mb-3 mt-3">
+                <label for="email" class="form-label">Email:</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+                </div>
+                <div class="mb-3">
+                <label for="pwd" class="form-label">Password:</label>
+                <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd">
+                </div>
+                <div class="form-check mb-3">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox" name="remember"> Remember me
+                </label>    
+                </div>
+                <button type="submit" class="btn btn-primary me-2">Log In
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">Sign up
+        </form>
+
+        <!--  Sign up Modal -->
+        <div class="modal" id="myModal">
+            <div class="modal-dialog">
+            <div class="modal-content">
+        
+                <!-- Modal Header -->
+                <div class="modal-header">
+                <h4 class="modal-title">Sign Up</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+        
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form >
+                        <div class="row mb-3 mt-3">
+                          <div class="col">
+                            <input type="text" class="form-control" placeholder="First name" name="first_name">
+                          </div>
+                          <div class="col">
+                            <input type="text" class="form-control" placeholder="Surname" name="surname">
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                              <input type="email" class="form-control" placeholder="email address" name="email">
+                            </div>
+                            <div class="col">
+                              <input type="password" class="form-control" placeholder="New password" name="pswd">
+                            </div>
+                          </div>
+                          <button type="button" class="btn btn-primary me-2">Sign Up
+                      </form>
+                
+                </div>
+        
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+        
+            </div>
+            </div>
+        </div>
+  
+       
+    </div>
+        <script src="/static/js/bootstrap.js" async defer></script>
+    </body>
+</html>
