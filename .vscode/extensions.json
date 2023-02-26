@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "kevinrose.vsc-python-indent",
+        "ecmel.vscode-html-css",
+        "necinc.elmmet",
+        "formulahendry.auto-close-tag",
+        "pushqrdx.inline-html"
+    ]
+}

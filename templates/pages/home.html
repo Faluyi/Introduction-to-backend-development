@@ -22,11 +22,11 @@
                 <td>
                     {{task["_id"]}}
                 </td>
-                <td>{{task["name"]}}</td>
-                <td>{{task["assigned_to"]}}</td>
+                <td>{{task.name}}</td>
+                <td>{{task.assigned_to}}</td>
                 <td>{{(task["date_assigned"]).strftime("%c")}}</td>
-                <td>{{task["deadline"]}}</td>
-                <td>{{task["progress"]}}<td>
+                <td>{{task.deadline}}</td>
+                <td>{{task.progress}}<td>
                 </tr> 
 
                 {%else%}

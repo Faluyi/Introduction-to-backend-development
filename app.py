@@ -37,60 +37,38 @@ def create_task():
            "description": request.form.get("description")
             }   
 
-        Tasks.insert_one(task)
-        return redirect(url_for("index"))
+        id = Tasks.insert_one(task)
+        if id :
+            flash ("Task successfully created")
+            return redirect(url_for("index"))
+        else:
+            flash ("Invalid details ")
     else:
         return render_template('forms/create_task.html')
-    
-    
-#@app.route('/task/add_breakdown',methods= ["POST","GET"] )
-#def add_breakdown():
- #   task_id = request.form.get('task_id')
-  #  if request.method=="POST":
-   #     data ={"Task_id": task_id,
-    #       "breakdown":request.form.get('breakdown') ,
-     #      "progress": ""
-       #   }
-      #  task_breakdown.insert_one(data)
-    
-        
-    #return redirect(url_for('load_breakdown', data=data, task_id=task_id))
-
-    
-    
-#@app.route('/task/breakdown', methods = ["POST","GET"])
-#def load_breakdown():
-  #  data=[]
-  #  breakdown=[]
-  #      data.append(x)
-   # for y in task_breakdown.find():
-    #    breakdown.append(y)
-    #return render_template('forms/add_breakdown.html', data=data, breakdown=breakdown)
 
 
 
 @app.route('/task/view_task', methods=["POST","GET"])
 def view_task():
-        task_id = request.form.get('task_id')
-        query = {"_id": task_id}
-        data = []
-        for x in Tasks.find(query):
-            data.append(x)
-        return render_template('/pages/view_task.html', task_id=task_id, data=data)
+    task_id = request.form.get('task_id')
+    query = {"_id": task_id}
+    app.logger.info(query)
+    data = []
+    for x in Tasks.find(query):
+        data.append(x)
+    app.logger.info(data)
+    return render_template('/pages/view_task.html', task_id=task_id, data=data)
+    
 
-
-@app.route('/task/update_progress/', methods=["POST"])
-def update_progress(): 
-    if request.method == "GET" :
-        query = task_breakdown.find()
-        for param in query["_id"]:
-            progress=request.args.get(param,"")
-            query={"_id":param} 
-            new={'$set':{"progress":progress}}
-            task_breakdown.update_one(query,new)
+@app.route('/task/update_progress', methods=["POST","GET"])
+def update_progress():
+    task_id = request.args.get("Task_id")
+    progress = request.args.get("progress")
+    query={"_id":task_id} 
+    new={'$set':{"progress":progress}}
+    Tasks.update_one(query,new)
 
     return redirect(url_for("index"))
-    
         
 # Using this as a test comment
 
