@@ -16,11 +16,13 @@
     </head>
     <body>
         <header>
-            <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+            <nav class="navbar navbar-expand-sm navbar-dark bg-dark" fixed-top>
                 <div class="container-fluid">
-                  <a class="navbar-brand" href="#">
+                  <div class="navbar-brand">
+                  <a data-bs-toggle="modal" data-bs-target="#myModal">
                     <img src="/static/images/avatar.jpg" alt="Avatar Logo" style="width:40px;" class="rounded-pill"> 
                   </a>
+                </div>
                   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
                     <span class="navbar-toggler-icon"></span>
                   </button>
@@ -38,7 +40,7 @@
                     </ul>
                     <form class="d-flex" action="/task/view_task", method="post">
                         <input class="form-select-sm me-2 form-control" list="task_id" name="task_id" id="browser" required>
-                        <datalist id="task_id">
+                        <datalist  id="task_id">
                           {% for data in tasks %}
                             <option value="{{data["_id"]}}">{{data["_id"]}}</option>
                           {% endfor %}
@@ -49,7 +51,31 @@
                   </div>
                 </div>
               </nav>
-              
+        <!-- The Modal -->
+<div class="modal" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Log Out?</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <p>Are you sure you want to log out?</p>
+        <a href="/"<button type="button" class="btn btn-danger">Yes</a>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+      </div>
+
+    </div>
+  </div>
+</div>      
         </header>
         <body>
           {% block content %}

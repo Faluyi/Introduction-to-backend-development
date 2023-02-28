@@ -5,18 +5,54 @@ import datetime
 client = MongoClient('mongodb://localhost:27017/')
 db = client['mydb']
 Tasks = db["Tasks"]
-task_breakdown =  db["task_breakdown"]
+Users = db["Users"]
+
 
 
 app = Flask(__name__)
 app.secret_key= "faluyi"
 
-#@app.route('/')
-#def index():
- #   return render_template('forms/login.html')
+    
 
 @app.route('/')
 def index():
+   return render_template('forms/login.html')
+
+@app.route('/User/Sign_up', methods=["POST"])
+def createUser():
+    user = {
+        "firstName" : request.form.get('first_name'),
+        "surname" : request.form.get('surname'),
+        "_id" : request.form.get('email'),
+        "pswd" : request.form.get('pswd'),
+        "tasks" : {}
+        }
+    Users.insert_one(user)
+    return redirect(url_for('index'))
+
+
+@app.route('/login/authenticateUser', methods=["POST"])
+def authenticateUser():
+    id = request.form.get('email')
+    pswd = request.form.get('pswd')
+    query = {"_id": id}
+    usr = Users.find(query)
+    
+    try:
+        if usr:
+            app.logger.info(usr)
+            for user in usr:
+                if user["pswd"]==pswd:
+                    return redirect(url_for('home'))
+                else:
+                    return redirect(url_for('index'))
+                    flash ("Invalid Login details")
+    except TypeError:
+        return redirect(url_for('index'))
+        flash ("Invalid Login details")
+
+@app.route('/home')
+def home():
     tasks=[]
     for x in Tasks.find():
         tasks.append(x)
