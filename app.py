@@ -49,7 +49,7 @@ def authenticateUser():
                     flash ("Invalid Login details")
     except TypeError:
         return redirect(url_for('index'))
-        flash ("Invalid Login details")
+        flash('Invalid Login details')
 
 @app.route('/home')
 def home():
@@ -63,10 +63,11 @@ def home():
 @app.route('/task/create', methods = ["POST", "GET"])
 def create_task():
     if request.method == "POST":
+        user_id = request.form.get("user")
         task = {
         "_id" : request.form.get('Task_id'),
             "name" : request.form.get('Task_title'),
-            "assigned_to" : request.form.get("asigned_to"),
+            "assigned_to" :user_id,
             "date_assigned": datetime.datetime.now(),
            "deadline" : request.form.get("Deadline"),
            "progress": request.form.get("progress"),
@@ -74,13 +75,24 @@ def create_task():
             }   
 
         id = Tasks.insert_one(task)
+        
+        query = {"_id": user_id}
+        #tasks = []
+        #for user in Users.find(query):
+            #tasks.append(user.tasks)
+            
+        
+        new={'$set':{"tasks":task}}
+        Users.update_one(query,new)
+        
         if id :
             flash ("Task successfully created")
-            return redirect(url_for("index"))
+            return redirect(url_for("home"))
         else:
             flash ("Invalid details ")
     else:
-        return render_template('forms/create_task.html')
+        users = Users.find()
+        return render_template('forms/create_task.html',users=users)
 
 
 
@@ -104,7 +116,7 @@ def update_progress():
     new={'$set':{"progress":progress}}
     Tasks.update_one(query,new)
 
-    return redirect(url_for("index"))
+    return redirect(url_for("home"))
         
 # Using this as a test comment
 

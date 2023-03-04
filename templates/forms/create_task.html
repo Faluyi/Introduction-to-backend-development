@@ -1,4 +1,4 @@
-{% extends '/pages/base.html' %}
+{% extends '/layouts/base.html' %}
 <!DOCTYPE html>
 {%block content%}
     <body>
@@ -20,9 +20,13 @@
                     <textarea class="form-control" rows="1" id="description" name="description" placeholder="What is the task all about?" required></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="asigned_to" class="form-label">Assign to:</label>
-                    <input type="text" class="form-control" id="asigned_to" placeholder="Assign task" name="asigned_to" required>
-                </div>
+                  <label for="user" class="form-label">Assign to:</label>
+                  <select class="form-select" name="user" readonly>
+                    {%for user in users%}
+                      <option value="{{user._id}}">{{user.surname}} {{user.firstName}}</option>
+                    {%endfor%}
+                    </select>
+              </div>
                 <div class="mb-3">
                     <label for="Deadline" class="form-label">Deadline:</label>
                     <input type="datetime-local" class="form-control" id="Deadline"  name="Deadline" required>
