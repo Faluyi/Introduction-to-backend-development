@@ -1,36 +1,35 @@
   {%extends '/layouts/base.html'%}
   <!DOCTYPE html>
     {%block content%}
-    <body>
-        <div class="container-fluid">
+
             <div class="Task_id">
             <h2>{{task_id}}</h2>
             </div>
             <form action="/task/update_progress",method="post"> 
                     <div class="mb-3 mt-3">
                         <label for="Task_id" class="form-label">Task id:</label>
-                        <input type="text" class="form-control" id="Task_id"  name="Task_id" {% for dt in data %} value="{{dt._id}}" {%endfor%} readonly>
+                        <input type="text" class="form-control" id="Task_id"  name="Task_id" value="{{data.id}}" readonly>
                       </div>
                       <div class="mb-3">
                         <label for="Task_title" class="form-label">Task title:</label>
-                        <input type="text" class="form-control" id="Task_title"  name="Task_title" {% for dt in data %} value="{{dt.name}}" {%endfor%} readonly>
+                        <input type="text" class="form-control" id="Task_title"  name="Task_title" value="{{data.name}}" readonly>
                       </div>
                       <div class="mb-3">
                           <label for="description" class="form-label">Description: </label>
-                          <input rows="1" class="form-control" id="description" name="description"  {% for dt in data %} value="{{dt.description}}" {%endfor%} readonly></input>
+                          <input rows="1" class="form-control" id="description" name="description" value="{{data.description}}" readonly></input>
                       </div>
                       <div class="mb-3">
-                          <label for="asigned_to" class="form-label">Assign to:</label>
-                          <input type="text" class="form-control" id="asigned_to"  name="asigned_to" {% for dt in data %} value="{{dt.assigned_to}}" {%endfor%} readonly>
+                          <label for="asigned_to" class="form-label">Assigned to:</label>
+                          <input type="text" class="form-control" id="asigned_to"  name="asigned_to" value="{{data.assigned_to.full_name}}" readonly>
                       </div>
                       <div class="mb-3">
                         <label for="asigned_to" class="form-label">Date assigned:</label>
-                        <input type="text" class="form-control" id="date_assigned" name="date_assigned" {% for dt in data %} value="{{dt.date_assigned.strftime("%c")}}" {%endfor%} readonly>
+                        <input type="text" class="form-control" id="date_assigned" name="date_assigned" value="{{data.date_assigned.strftime("%c")}}" readonly>
                     </div>
 
                       <div class="mb-3">
                           <label for="Deadline" class="form-label">Deadline:</label>
-                          <input type="datetime-local" class="form-control" id="Deadline"  name="Deadline" {% for dt in data %} value="{{dt.deadline}}" {%endfor%} readonly>
+                          <input type="datetime-local" class="form-control" id="Deadline"  name="Deadline" value="{{data.deadline}}" readonly>
                       </div>
                     <div class="mb-3">
                         <label for="progress" class="form-label">Progress:</label>
@@ -41,8 +40,6 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
             </form>
-    </div>
-        <script src="" async defer></script>
-    </body>
+   
     {%endblock%}
 </html>

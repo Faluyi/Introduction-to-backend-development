@@ -1,8 +1,6 @@
 {% extends '/layouts/base.html' %}
 <!DOCTYPE html>
 {%block content%}
-    <body>
-      <div class="container-fluid">
         <div class="form-header">
           <h2 class="modal-title">Create a New Task</h2>
           </div>
@@ -23,7 +21,7 @@
                   <label for="user" class="form-label">Assign to:</label>
                   <select class="form-select" name="user" readonly>
                     {%for user in users%}
-                      <option value="{{user._id}}">{{user.surname}} {{user.firstName}}</option>
+                      <option value="{{user._id}}">{{user.surname}} {{user.firstname}}</option>
                     {%endfor%}
                     </select>
               </div>
@@ -39,8 +37,6 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </form>
-            </div>
-        <script src="" async defer></script>
-    </body>
+          
     {%endblock%}
 </html>

@@ -1,17 +1,16 @@
 {% extends '/layouts/base.html' %}
 <!DOCTYPE html>
     {%block content%}
-    <body>
-       <div class="container-fluid">
         <div class="dropdown text-end">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown-menu">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
               Filter
             </button>
-            <ul class="dropdown-menu">
-                <li><input type="radio" class="form-check-input" id="radio1" name="optradio" value="option1" checked>Option 1
-                <label class="form-check-label" for="radio1"></label>
-                </li>
-            </ul>
+            <div>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#"><input type="radio" class="form-check-input " id="radio1" name="optradio" value="option1" checked>Progress</a></li>
+                    <li><a class="dropdown-item" href="#"><input type="radio" class="form-check-input " id="radio1" name="optradio" value="option1" checked>Due date</a></li>
+                  </ul>
+            </div>
         </div>
             <div class="table-header">
             <h2>Active Tasks</h2>
@@ -30,10 +29,10 @@
             <form action="/task/breakdown" method="post">
             {% for task in tasks %}
                 <td>
-                    {{task["_id"]}}
+                    {{task["id"]}}
                 </td>
                 <td>{{task.name}}</td>
-                <td>{{task.assigned_to}}</td>
+                <td>{{(task.assigned_to).full_name}}</td>
                 <td>{{(task["date_assigned"]).strftime("%c")}}</td>
                 <td>{{task.deadline}}</td>
                 <td>{{task.progress}}<td>
@@ -45,12 +44,10 @@
             
             </form>
         </table>
-    </div>
+        </div>
+          
        {%endblock%}
-        <script src="" async defer></script>
 
-      
-    </body>
 </html>
 
 

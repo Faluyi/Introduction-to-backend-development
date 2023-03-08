@@ -1,124 +1,155 @@
-from pymongo import MongoClient
-
+from db.models import User,Task,UserRepo,TaskRepo
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import datetime
-client = MongoClient('mongodb://localhost:27017/')
-db = client['mydb']
-Tasks = db["Tasks"]
-Users = db["Users"]
 
 
 
 app = Flask(__name__)
 app.secret_key= "faluyi"
 
+user_repo = UserRepo()
+task_repo = TaskRepo()
     
-
-@app.route('/')
+#returns the login page
+@app.get('/')
 def index():
-   return render_template('forms/login.html')
+    if "user" in session:
+        return redirect(url_for('home'))
+    else:
+        return render_template('forms/login.html')
 
-@app.route('/User/Sign_up', methods=["POST"])
+#get user details and create user
+@app.post('/User/Sign_up')
 def createUser():
-    user = {
-        "firstName" : request.form.get('first_name'),
-        "surname" : request.form.get('surname'),
-        "_id" : request.form.get('email'),
-        "pswd" : request.form.get('pswd'),
-        "tasks" : {}
-        }
-    Users.insert_one(user)
-    return redirect(url_for('index'))
-
-
-@app.route('/login/authenticateUser', methods=["POST"])
-def authenticateUser():
-    id = request.form.get('email')
-    pswd = request.form.get('pswd')
-    query = {"_id": id}
-    usr = Users.find(query)
-    
-    try:
+        firstName = request.form.get('first_name')
+        surname = request.form.get('surname')
+        email =  request.form.get('email')
+        pswd = request.form.get('pswd')
+        usr = user_repo.get_user_by_email(email)
         if usr:
-            app.logger.info(usr)
-            for user in usr:
-                if user["pswd"]==pswd:
-                    return redirect(url_for('home'))
-                else:
-                    return redirect(url_for('index'))
-                    flash ("Invalid Login details")
-    except TypeError:
+            flash('an account is already attached to the email address inputed')
+            return redirect(url_for('index'))
+        else:
+            user = User(firstName, surname, email, pswd)
+            created = user_repo.create_user(user)
+            if created:
+                flash('Sign up successful')
+                return redirect(url_for('index'))
+            else:
+                flash('Sign up not successfull')
+                return redirect(url_for('index'))
+
+
+@app.post('/login/authenticateUser')
+def authenticateUser():
+    email = request.form.get('email')
+    pswd = request.form.get('pswd')
+    user = user_repo.get_user_by_email(email)
+    
+    if user:
+        app.logger.info(user)
+        if user["password"]==pswd:
+            session["user"] = email
+            flash('Welcome!' + " " + user["surname"] + " " + user["firstname"])
+            return redirect(url_for('home'))
+        else:
+            flash("Login attempt failed! Incorrect password")
+            return redirect(url_for('index'))
+    else:
+        flash("Login attempt failed! Invalid Login details")
         return redirect(url_for('index'))
-        flash('Invalid Login details')
 
-@app.route('/home')
+@app.get('/logout_user')
+def logout():
+    session.pop("user",None)
+    return redirect(url_for('index'))    
+
+@app.get('/home')
 def home():
-    tasks=[]
-    for x in Tasks.find():
-        tasks.append(x)
-        
-    return render_template('pages/home.html', tasks=tasks)
+    if "user" in session:
+        tasks=[]
+        for x in task_repo.get_all_tasks():
+            tasks.append(x)
+        return render_template('pages/home.html', tasks=tasks)
+    else:
+        flash(" Ooops,You aren't logged in! Log in and try again")
+        return redirect(url_for('index'))
     
     
-@app.route('/task/create', methods = ["POST", "GET"])
+@app.route('/task/create', methods=["POST","GET"])
 def create_task():
-    if request.method == "POST":
-        user_id = request.form.get("user")
-        task = {
-        "_id" : request.form.get('Task_id'),
-            "name" : request.form.get('Task_title'),
-            "assigned_to" :user_id,
-            "date_assigned": datetime.datetime.now(),
-           "deadline" : request.form.get("Deadline"),
-           "progress": request.form.get("progress"),
-           "description": request.form.get("description")
-            }   
+    if "user" in session:
+        if request.method == "POST":
+            user_id = request.form.get("user")
+            user = user_repo.get_user_by_id(user_id)
+            users = user_repo.get_all_users()
 
-        id = Tasks.insert_one(task)
-        
-        query = {"_id": user_id}
-        #tasks = []
-        #for user in Users.find(query):
-            #tasks.append(user.tasks)
+            full_name = "{0} {1}".format(user["firstname"], user["surname"])
             
-        
-        new={'$set':{"tasks":task}}
-        Users.update_one(query,new)
-        
-        if id :
-            flash ("Task successfully created")
+            id = request.form.get('Task_id')
+            name = request.form.get('Task_title')
+            assigned_to = {"user_id": user_id, "full_name": full_name}
+            date_assigned = datetime.datetime.now()
+            deadline = request.form.get("Deadline")
+            progress = request.form.get("progress")
+            description = request.form.get("description")  
+            
+            check_id = task_repo.get_task_by_task_id(id)
+            
+            if check_id:
+                flash('Task creation failed!, try using another task id')
+                return render_template('/forms/create_task.html', users=users)
+            else:
+                task = Task(id, name, assigned_to, date_assigned, deadline, progress, description)
+                created = task_repo.create_task(task)
+                
+                if created:
+                    flash (id + " successfully created")
+                    return redirect(url_for("home"))
+                else:
+                    flash ("Invalid details ")
+                    return render_template('/forms/create_task.html', users=users)
+        else:
+            users = user_repo.get_all_users()
+            return render_template('/forms/create_task.html', users=users)
+    else:
+        flash(" Ooops,You aren't logged in! Log in and try again")
+        return redirect(url_for('index'))
+
+
+@app.post('/task/view_task')
+def view_task():
+    if "user" in session:
+        task_id = request.form.get('task_id')
+        data = task_repo.get_task_by_task_id(task_id)
+        app.logger.info(data)
+        return render_template('/pages/view_task.html', task_id=task_id, data=data)
+    else:
+        flash(" Ooops,You aren't logged in! Log in and try again")
+        return redirect(url_for('index'))
+    
+
+@app.get('/task/update_progress')
+def update_progress():
+    if "user" in session:
+        task_id = request.args.get("Task_id")
+        progress = request.args.get("progress")
+        status = task_repo.update_task(task_id, progress)
+
+        if status == "the same":
+            flash('No update made')
+            return redirect(url_for("home"))
+        elif status == True:
+            flash(task_id + ' updated successfully!')
             return redirect(url_for("home"))
         else:
-            flash ("Invalid details ")
+            flash('Update not successful')
+            return redirect(url_for("home"))
     else:
-        users = Users.find()
-        return render_template('forms/create_task.html',users=users)
+        flash(" Ooops,You aren't logged in! Log in and try again")
+        return redirect(url_for('index'))
 
-
-
-@app.route('/task/view_task', methods=["POST","GET"])
-def view_task():
-    task_id = request.form.get('task_id')
-    query = {"_id": task_id}
-    app.logger.info(query)
-    data = []
-    for x in Tasks.find(query):
-        data.append(x)
-    app.logger.info(data)
-    return render_template('/pages/view_task.html', task_id=task_id, data=data)
-    
-
-@app.route('/task/update_progress', methods=["POST","GET"])
-def update_progress():
-    task_id = request.args.get("Task_id")
-    progress = request.args.get("progress")
-    query={"_id":task_id} 
-    new={'$set':{"progress":progress}}
-    Tasks.update_one(query,new)
-
-    return redirect(url_for("home"))
-        
-# Using this as a test comment
 
 if __name__ =="__main__":
     app.run(debug=True)
+
