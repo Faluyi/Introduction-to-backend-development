@@ -1,11 +1,13 @@
 from db.models import User,Task,UserRepo,TaskRepo
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import datetime
+from datetime import timedelta
 
 
 
 app = Flask(__name__)
 app.secret_key= "faluyi"
+app.permanent_session_lifetime = timedelta(days = 7)
 
 user_repo = UserRepo()
 task_repo = TaskRepo()
@@ -49,6 +51,7 @@ def authenticateUser():
     if user:
         app.logger.info(user)
         if user["password"]==pswd:
+            session.permanent = True
             session["user"] = email
             flash('Welcome!' + " " + user["surname"] + " " + user["firstname"])
             return redirect(url_for('home'))

@@ -26,7 +26,6 @@
                 <th> </th>
 
             </tr>
-            <form action="/task/breakdown" method="post">
             {% for task in tasks %}
                 <td>
                     {{task["id"]}}
@@ -42,7 +41,6 @@
                 <h2>No Active Tasks</h2>
             {% endfor %} 
             
-            </form>
         </table>
         </div>
           
