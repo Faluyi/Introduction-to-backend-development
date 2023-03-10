@@ -51,8 +51,13 @@ class TaskRepo:
         else:
             return self.collection.update_one(
            {"id": task_id}, {"$set": {"progress":progress}}).modified_count > 0
+            
+    def sort_by(self, sort_mode):
+        if sort_mode == "status":
+            return self.collection.find().sort("progress")
+        elif sort_mode == "due_date":
+            return self.collection.find().sort("deadline")
 
-     
 class User:
     def __init__(self, firstName, surname, email, pswd) -> None:
         self.email = email
@@ -69,4 +74,5 @@ class Task:
         self.deadline = deadline
         self.progress = progress
         self.description = description
+        
         

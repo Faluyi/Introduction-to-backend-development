@@ -70,9 +70,8 @@ def logout():
 @app.get('/home')
 def home():
     if "user" in session:
-        tasks=[]
-        for x in task_repo.get_all_tasks():
-            tasks.append(x)
+        tasks = list(task_repo.get_all_tasks())
+        app.logger.info(tasks)
         return render_template('pages/home.html', tasks=tasks)
     else:
         flash(" Ooops,You aren't logged in! Log in and try again")
@@ -82,6 +81,7 @@ def home():
 @app.route('/task/create', methods=["POST","GET"])
 def create_task():
     if "user" in session:
+        tasks = list(task_repo.get_all_tasks())
         if request.method == "POST":
             user_id = request.form.get("user")
             user = user_repo.get_user_by_id(user_id)
@@ -101,7 +101,7 @@ def create_task():
             
             if check_id:
                 flash('Task creation failed!, try using another task id')
-                return render_template('/forms/create_task.html', users=users)
+                return render_template('/forms/create_task.html', users=users, tasks=tasks)
             else:
                 task = Task(id, name, assigned_to, date_assigned, deadline, progress, description)
                 created = task_repo.create_task(task)
@@ -111,10 +111,10 @@ def create_task():
                     return redirect(url_for("home"))
                 else:
                     flash ("Invalid details ")
-                    return render_template('/forms/create_task.html', users=users)
+                    return render_template('/forms/create_task.html', users=users, tasks=tasks)
         else:
             users = user_repo.get_all_users()
-            return render_template('/forms/create_task.html', users=users)
+            return render_template('/forms/create_task.html', users=users, tasks=tasks)
     else:
         flash(" Ooops,You aren't logged in! Log in and try again")
         return redirect(url_for('index'))
@@ -148,6 +148,17 @@ def update_progress():
         else:
             flash('Update not successful')
             return redirect(url_for("home"))
+    else:
+        flash(" Ooops,You aren't logged in! Log in and try again")
+        return redirect(url_for('index'))
+    
+@app.post('/home/sorted')
+def sort_task():
+    if "user" in session:
+        sort_mode = request.form.get("sort_mode")
+        tasks = list(task_repo.sort_by(sort_mode))
+        app.logger.info(tasks)
+        return render_template('pages/home.html', tasks=tasks, sort_mode=sort_mode)    
     else:
         flash(" Ooops,You aren't logged in! Log in and try again")
         return redirect(url_for('index'))

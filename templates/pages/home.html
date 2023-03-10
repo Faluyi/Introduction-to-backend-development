@@ -3,14 +3,17 @@
     {%block content%}
         <div class="dropdown text-end">
             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
-              Filter
+              Sort
             </button>
+            <form action="/home/sorted" method="post">
             <div>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#"><input type="radio" class="form-check-input " id="radio1" name="optradio" value="option1" checked>Progress</a></li>
-                    <li><a class="dropdown-item" href="#"><input type="radio" class="form-check-input " id="radio1" name="optradio" value="option1" checked>Due date</a></li>
+                    <li><a class="dropdown-item" href="#"><input type="radio" class="form-check-input " id="radio1" name="sort_mode" value="status" {%if sort_mode=="status"%}checked{%endif%}>Status</a></li>
+                    <li><a class="dropdown-item" href="#"><input type="radio" class="form-check-input " id="radio1" name="sort_mode" value="due_date" {%if sort_mode=="due_date"%}checked{%endif%}>Due date</a></li>
+                    <button type="submit" class="dropdown-item btn btn-primary"> Apply</button>
                   </ul>
             </div>
+            </form>
         </div>
             <div class="table-header">
             <h2>Active Tasks</h2>
