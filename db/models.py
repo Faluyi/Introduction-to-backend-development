@@ -2,13 +2,16 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 client = MongoClient('mongodb://localhost:27017/')
-db = client['mydb']
+db = client['dbTest']
 Tasks = db["Tasks"]
 Users = db["Users"]
 
 class UserRepo:
     def __init__(self) -> None:
         self.collection = db['Users']
+        
+    def get_one_user(self):
+        return self.collection.find_one()
         
     def get_all_users(self):
         return self.collection.find()
@@ -30,6 +33,9 @@ class UserRepo:
 class TaskRepo:
     def __init__(self) -> None:
         self.collection = db['Tasks']
+
+    def get_one_task(self):
+        return self.collection.find_one()
 
     def get_all_tasks(self):
         return self.collection.find()

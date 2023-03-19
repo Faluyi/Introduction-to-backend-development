@@ -9,7 +9,7 @@ task_repo = TaskRepo()
 def create_app(test_config=None):
     app = Flask(__name__)
     app.secret_key= "faluyi"
-    app.permanent_session_lifetime = timedelta(days = 7)
+    #app.permanent_session_lifetime = timedelta(days = 7)
 
         
     #returns the login page
@@ -51,9 +51,9 @@ def create_app(test_config=None):
         if user:
             app.logger.info(user)
             if user["password"]==pswd:
-                session.permanent = True
+                #session.permanent = True
                 session["user"] = email
-                flash('Welcome!' + " " + user["surname"] + " " + user["firstname"])
+                #flash('Welcome!' + " " + user["surname"] + " " + user["firstname"])
                 return redirect(url_for('home'))
             else:
                 flash("Login attempt failed! Incorrect password")
